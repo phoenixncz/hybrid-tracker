@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Hybrid Athlete Tracker v5.1</title>
+    <title>Hybrid Athlete Tracker v5.2</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <style>
         input, select, textarea { font-size: 16px; }
@@ -29,7 +29,7 @@
                 <h1 class="text-2xl font-black tracking-widest bg-clip-text text-transparent bg-gradient-to-r from-orange-500 to-red-500">
                     HYBRID ATHLETE
                 </h1>
-                <p class="text-[10px] text-gray-400 mt-1 uppercase tracking-widest">Pro Telemetry Tracker v5.1</p>
+                <p class="text-[10px] text-gray-400 mt-1 uppercase tracking-widest">Pro Telemetry Tracker v5.2</p>
             </div>
             <div class="text-right">
                 <span id="currentDayLabel" class="text-[10px] font-bold bg-orange-500/20 text-orange-400 px-2 py-1 rounded border border-orange-500/30">HARI INI</span>
@@ -112,7 +112,6 @@
                     </div>
                 </div>
 
-                <!-- Ultimate Goals (Kembali Ditampilkan) -->
                 <div class="bg-gray-800/60 backdrop-blur-sm rounded-xl p-4 border border-gray-700/50 shadow-lg">
                     <div class="flex items-center space-x-2 mb-4">
                         <span class="text-orange-500 text-lg">🎯</span>
@@ -181,7 +180,7 @@
                 </div>
 
                 <div class="bg-gray-800/60 backdrop-blur-sm rounded-xl p-4 border border-gray-700/50 shadow-lg">
-                    <h2 class="text-sm font-bold text-gray-300 mb-3 border-b border-gray-700/50 pb-2">Catat Manual & Telemetri HR</h2>
+                    <h2 class="text-sm font-bold text-gray-300 mb-3 border-b border-gray-700/50 pb-2">Catat Manual & Telemetri Pro</h2>
                     <form id="workoutForm" class="space-y-3">
                         <div class="grid grid-cols-2 gap-3">
                             <div>
@@ -213,9 +212,13 @@
                                     <input type="number" id="avgHr" class="w-full p-2 text-sm bg-gray-900 border border-gray-700 rounded-lg text-white" placeholder="135">
                                 </div>
                                 <div class="w-1/2">
-                                    <label class="block text-[10px] font-bold text-gray-500 uppercase mb-1">Splits / Detail</label>
+                                    <label class="block text-[10px] font-bold text-gray-500 uppercase mb-1">Splits Pace / Km</label>
                                     <input type="text" id="splits" class="w-full p-2 text-sm bg-gray-900 border border-gray-700 rounded-lg text-white" placeholder="7:00, 7:02, 7:35...">
                                 </div>
+                            </div>
+                            <div>
+                                <label class="block text-[10px] font-bold text-gray-500 uppercase mb-1">Splits HR / Km (BARU)</label>
+                                <input type="text" id="hrSplits" class="w-full p-2 text-sm bg-gray-900 border border-gray-700 rounded-lg text-white" placeholder="125, 130, 135, 140 bpm...">
                             </div>
                         </div>
                         <div id="liftFields" class="hidden flex space-x-3">
@@ -306,6 +309,7 @@
                 workout.pace = document.getElementById('pace').value;
                 workout.avgHr = document.getElementById('avgHr').value;
                 workout.splits = document.getElementById('splits').value;
+                workout.hrSplits = document.getElementById('hrSplits').value; // Field baru HR Split
             } else {
                 workout.liftName = document.getElementById('liftName').value;
                 workout.liftDetail = document.getElementById('liftDetail').value;
@@ -389,6 +393,7 @@
                             pace: formatPace,
                             avgHr: avgHeartRate,
                             splits: 'Sinkronisasi Strava',
+                            hrSplits: 'N/A',
                             notes: activity.name,
                             coach_feedback: ''
                         };
@@ -412,12 +417,13 @@
             if(w.type === 'lari') {
                 promptText += `Tipe Latihan: Lari Aspal/Treadmill\nJarak: ${w.distance} Km\nPace Rata-rata: ${w.pace} /km\n`;
                 if(w.avgHr) promptText += `Avg Heart Rate: ${w.avgHr} bpm\n`;
-                if(w.splits) promptText += `Split per Km / Detail: ${w.splits}\n`;
+                if(w.splits) promptText += `Splits Pace / Km: ${w.splits}\n`;
+                if(w.hrSplits) promptText += `Splits HR / Km: ${w.hrSplits}\n`;
             } else {
                 promptText += `Tipe Latihan: Bengkel Mekanis (Beban)\nFokus Latihan: ${w.liftName}\nBeban/Set: ${w.liftDetail}\n`;
             }
             if(w.notes) promptText += `Catatan Kondisi Lapangan: ${w.notes}\n`;
-            promptText += `\nTolong berikan summary dan analisis Anda secara klinis sebagai pelatih terhadap sesi ini, termasuk korelasi antara pace, heart rate, dan splits per kilometer.`;
+            promptText += `\nTolong berikan summary dan analisis Anda secara klinis sebagai pelatih terhadap sesi ini, dengan membedah korelasi terperinci antara splits pace dan splits heart rate per kilometer.`;
 
             navigator.clipboard.writeText(promptText).then(() => {
                 const toast = document.getElementById('copyToast');
@@ -538,7 +544,8 @@
                     detailHTML = `
                         <p class="text-sm text-gray-200 font-bold">${w.distance} Km <span class="text-gray-600 mx-1">|</span> Pace ${w.pace} /km</p>
                         <p class="text-[11px] text-orange-400 font-semibold mt-0.5">💓 Avg HR: ${w.avgHr ? w.avgHr + ' bpm' : 'N/A'}</p>
-                        ${w.splits ? `<p class="text-[10px] text-gray-400 mt-0.5">⚡ Splits: ${w.splits}</p>` : ''}
+                        ${w.splits ? `<p class="text-[10px] text-gray-400 mt-0.5">⚡ Splits Pace: ${w.splits}</p>` : ''}
+                        ${w.hrSplits ? `<p class="text-[10px] text-red-400 mt-0.5">🔥 Splits HR: ${w.hrSplits}</p>` : ''}
                     `;
                 } else {
                     icon = '<span class="text-xl">🏋️‍♂️</span>';
@@ -550,7 +557,7 @@
                         <div class="flex items-start justify-between mb-2">
                             <div class="flex items-center space-x-3">
                                 ${icon}
-                                <div>
+                                <div class="max-w-[220px]">
                                     <p class="text-[10px] text-gray-500 font-bold uppercase tracking-wider">${formattedDate}</p>
                                     ${detailHTML}
                                     ${w.notes ? `<p class="text-[11px] text-gray-400 mt-1 italic">${w.notes}</p>` : ''}
