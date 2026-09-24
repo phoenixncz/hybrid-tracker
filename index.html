@@ -1,0 +1,500 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hybrid Athlete Tracker v3.0</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        input, select, textarea { font-size: 16px; }
+        .tab-active { 
+            border-bottom: 3px solid #f97316; 
+            color: #f97316; 
+            background: linear-gradient(to top, rgba(249, 115, 22, 0.1), transparent);
+        }
+        /* Custom scrollbar statis */
+        ::-webkit-scrollbar { width: 6px; }
+        ::-webkit-scrollbar-track { background: #1f2937; }
+        ::-webkit-scrollbar-thumb { background: #4b5563; border-radius: 10px; }
+    </style>
+</head>
+<body class="bg-gray-900 text-gray-100 min-h-screen pb-10 font-sans antialiased selection:bg-orange-500 selection:text-white">
+
+    <div class="max-w-md mx-auto bg-[#111827] min-h-screen shadow-2xl flex flex-col relative overflow-hidden">
+        <!-- Dekorasi Latar Belakang (Glow effect) -->
+        <div class="absolute top-0 left-1/2 -translate-x-1/2 w-[300px] h-[150px] bg-orange-600/20 blur-[80px] rounded-full pointer-events-none"></div>
+
+        <!-- Header -->
+        <header class="bg-gradient-to-r from-gray-900 to-gray-800 border-b border-gray-800 text-white p-5 sticky top-0 z-20 backdrop-blur-md bg-opacity-90">
+            <h1 class="text-2xl font-black tracking-widest text-center bg-clip-text text-transparent bg-gradient-to-r from-orange-500 to-red-500">
+                HYBRID ATHLETE
+            </h1>
+            <p class="text-[11px] text-center text-gray-400 mt-1 uppercase tracking-widest">Engine & Mechanical Tracker</p>
+        </header>
+
+        <!-- Navigation -->
+        <div class="flex bg-gray-900/90 backdrop-blur-md border-b border-gray-800 sticky top-[77px] z-20">
+            <button onclick="switchTab('dashboard')" id="tab-dashboard" class="flex-1 py-3 text-xs font-bold text-gray-500 uppercase tracking-wide tab-active transition-all">Dashboard</button>
+            <button onclick="switchTab('input')" id="tab-input" class="flex-1 py-3 text-xs font-bold text-gray-500 uppercase tracking-wide transition-all">Log & Sync</button>
+        </div>
+
+        <main class="p-4 flex-grow relative z-10">
+            
+            <!-- ================= DASHBOARD TAB ================= -->
+            <div id="view-dashboard" class="space-y-4">
+                
+                <!-- 1. Sesi Hari Ini -->
+                <div class="bg-gray-800/60 backdrop-blur-sm rounded-xl p-4 border border-gray-700/50 relative overflow-hidden shadow-lg">
+                    <div class="absolute left-0 top-0 w-1 h-full bg-blue-500"></div>
+                    <div class="flex items-center space-x-2 mb-2">
+                        <span class="text-blue-400 text-lg">📅</span>
+                        <h2 class="text-xs font-bold text-blue-400 uppercase tracking-wider">Instruksi Hari Ini</h2>
+                    </div>
+                    <p id="todayAgenda" class="text-xl font-bold text-white"></p>
+                    <p id="todayDetail" class="text-xs text-gray-400 mt-1.5 leading-relaxed"></p>
+                </div>
+
+                <!-- 2. Target Mingguan (NEW) -->
+                <div class="bg-gray-800/60 backdrop-blur-sm rounded-xl p-4 border border-gray-700/50 shadow-lg">
+                    <div class="flex justify-between items-end mb-2">
+                        <div class="flex items-center space-x-2">
+                            <span class="text-green-400 text-lg">📊</span>
+                            <h2 class="text-xs font-bold text-green-400 uppercase tracking-wider">Milase Minggu Ini</h2>
+                        </div>
+                        <span class="text-[10px] text-gray-500 font-bold bg-gray-900 px-2 py-1 rounded-md">Target: 15 Km</span>
+                    </div>
+                    <div class="flex justify-between text-sm text-white font-bold mb-2">
+                        <span id="weeklyDistance">0.00 Km</span>
+                        <span id="weeklyPercent" class="text-green-400">0%</span>
+                    </div>
+                    <div class="w-full bg-gray-900 rounded-full h-2.5 shadow-inner">
+                        <div id="weeklyProgress" class="bg-gradient-to-r from-green-500 to-emerald-400 h-2.5 rounded-full transition-all duration-1000 ease-out" style="width: 0%"></div>
+                    </div>
+                </div>
+
+                <!-- 3. Proyeksi Performa Riegel -->
+                <div class="bg-gray-800/60 backdrop-blur-sm rounded-xl p-4 border border-gray-700/50 shadow-lg">
+                    <div class="flex items-center space-x-2 mb-3">
+                        <span class="text-yellow-400 text-lg">⚡</span>
+                        <h2 class="text-xs font-bold text-yellow-400 uppercase tracking-wider">Prediksi Mesin (Riegel)</h2>
+                    </div>
+                    <div class="grid grid-cols-4 gap-2">
+                        <div class="bg-gray-900/80 p-2 rounded-lg text-center border border-gray-800">
+                            <p class="text-[10px] text-gray-500 font-bold mb-1">5K</p>
+                            <p id="pred5k" class="text-xs font-bold text-white">-</p>
+                        </div>
+                        <div class="bg-gray-900/80 p-2 rounded-lg text-center border border-gray-800">
+                            <p class="text-[10px] text-gray-500 font-bold mb-1">10K</p>
+                            <p id="pred10k" class="text-xs font-bold text-white">-</p>
+                        </div>
+                        <div class="bg-gray-900/80 p-2 rounded-lg text-center border border-orange-900/50 ring-1 ring-orange-500/20">
+                            <p class="text-[10px] text-orange-400 font-bold mb-1">HM</p>
+                            <p id="predHM" class="text-xs font-bold text-orange-400">-</p>
+                        </div>
+                        <div class="bg-gray-900/80 p-2 rounded-lg text-center border border-orange-900/50 ring-1 ring-orange-500/20">
+                            <p class="text-[10px] text-orange-400 font-bold mb-1">FM</p>
+                            <p id="predFM" class="text-xs font-bold text-orange-400">-</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 4. Ultimate Goals Roadmap (Redesigned) -->
+                <div class="bg-gray-800/60 backdrop-blur-sm rounded-xl p-4 border border-gray-700/50 shadow-lg">
+                    <div class="flex items-center space-x-2 mb-4">
+                        <span class="text-orange-500 text-lg">🎯</span>
+                        <h2 class="text-xs font-bold text-orange-500 uppercase tracking-wider">Ultimate Goals</h2>
+                    </div>
+                    
+                    <div class="space-y-4">
+                        <!-- Goal 1 -->
+                        <div class="flex items-center justify-between p-3 bg-gray-900/50 rounded-lg border border-gray-700/50">
+                            <div class="flex items-center space-x-3">
+                                <div class="w-8 h-8 rounded-full bg-orange-500/20 flex items-center justify-center border border-orange-500/50">
+                                    <span class="text-sm">🔥</span>
+                                </div>
+                                <div>
+                                    <p class="text-sm font-bold text-white">Sub-2 HM</p>
+                                    <p class="text-[10px] text-gray-400">Juni 2027</p>
+                                </div>
+                            </div>
+                            <div class="text-right">
+                                <p class="text-xs font-bold text-gray-300">Target Pace</p>
+                                <p class="text-sm font-black text-orange-400">05:41 /km</p>
+                            </div>
+                        </div>
+
+                        <!-- Goal 2 -->
+                        <div class="flex items-center justify-between p-3 bg-gray-900/50 rounded-lg border border-gray-700/50">
+                            <div class="flex items-center space-x-3">
+                                <div class="w-8 h-8 rounded-full bg-red-500/20 flex items-center justify-center border border-red-500/50">
+                                    <span class="text-sm">☠️</span>
+                                </div>
+                                <div>
+                                    <p class="text-sm font-bold text-white">Full Marathon</p>
+                                    <p class="text-[10px] text-gray-400">Oktober 2027</p>
+                                </div>
+                            </div>
+                            <div class="text-right">
+                                <p class="text-xs font-bold text-gray-300">Target Time</p>
+                                <p class="text-sm font-black text-red-400">04:30:00</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- ================= INPUT & SYNC TAB ================= -->
+            <div id="view-input" class="hidden space-y-4">
+                
+                <!-- Modul Strava -->
+                <div class="bg-gray-800/60 backdrop-blur-sm rounded-xl p-4 border border-gray-700/50 shadow-lg relative overflow-hidden">
+                    <div class="absolute left-0 top-0 w-1 h-full bg-orange-500"></div>
+                    <h2 class="text-sm font-bold text-white mb-3 flex items-center">
+                        <svg class="w-4 h-4 text-orange-500 mr-2" fill="currentColor" viewBox="0 0 24 24"><path d="M15.387 17.944l-2.089-4.116h-3.065L15.387 24l5.15-10.172h-3.066m-7.008-5.599l2.836 5.598h4.172L10.463 0l-7 13.828h4.169"/></svg>
+                        Sinkronisasi Strava
+                    </h2>
+                    
+                    <div class="space-y-3">
+                        <div class="flex space-x-2">
+                            <input type="text" id="clientId" class="w-1/3 p-2.5 text-xs bg-gray-900 border border-gray-700 rounded-lg text-white focus:border-orange-500 focus:outline-none" placeholder="Client ID">
+                            <input type="password" id="clientSecret" class="w-2/3 p-2.5 text-xs bg-gray-900 border border-gray-700 rounded-lg text-white focus:border-orange-500 focus:outline-none" placeholder="Client Secret">
+                        </div>
+                        <button onclick="connectStrava()" class="w-full bg-blue-600/90 hover:bg-blue-600 text-white text-xs font-bold py-3 px-3 rounded-lg shadow-md transition-all">
+                            👉 Langkah 1: Otorisasi
+                        </button>
+                        <div id="step2" class="hidden pt-3 border-t border-gray-700/50">
+                            <input type="text" id="redirectUrl" class="w-full p-2.5 text-xs bg-gray-900 border border-gray-700 rounded-lg text-white focus:border-orange-500 focus:outline-none" placeholder="Paste URL Error (http://localhost...)">
+                            <button onclick="processStravaUrl()" class="w-full mt-2 bg-gradient-to-r from-orange-600 to-red-600 hover:from-orange-500 hover:to-red-500 text-white text-xs font-bold py-3 px-3 rounded-lg shadow-md transition-all">
+                                Langkah 2: Tarik Data
+                            </button>
+                        </div>
+                        <p id="stravaStatus" class="text-xs text-orange-400 mt-2 font-bold hidden"></p>
+                    </div>
+                </div>
+
+                <!-- Form Manual -->
+                <div class="bg-gray-800/60 backdrop-blur-sm rounded-xl p-4 border border-gray-700/50 shadow-lg">
+                    <h2 class="text-sm font-bold text-gray-300 mb-3 border-b border-gray-700/50 pb-2">Catat Manual</h2>
+                    <form id="workoutForm" class="space-y-3">
+                        <div class="grid grid-cols-2 gap-3">
+                            <div>
+                                <label class="block text-[10px] font-bold text-gray-500 uppercase mb-1">Tanggal</label>
+                                <input type="date" id="date" class="w-full p-2.5 text-sm bg-gray-900 border border-gray-700 rounded-lg text-white focus:border-orange-500 focus:outline-none" required>
+                            </div>
+                            <div>
+                                <label class="block text-[10px] font-bold text-gray-500 uppercase mb-1">Jenis</label>
+                                <select id="type" class="w-full p-2.5 text-sm bg-gray-900 border border-gray-700 rounded-lg text-white focus:border-orange-500 focus:outline-none" onchange="toggleFields()" required>
+                                    <option value="lari">Lari (Aspal)</option>
+                                    <option value="beban">Beban (Besi)</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div id="runFields" class="flex space-x-3">
+                            <div class="w-1/2">
+                                <label class="block text-[10px] font-bold text-gray-500 uppercase mb-1">Jarak (Km)</label>
+                                <input type="number" step="0.01" id="distance" class="w-full p-2.5 text-sm bg-gray-900 border border-gray-700 rounded-lg text-white focus:border-orange-500 focus:outline-none">
+                            </div>
+                            <div class="w-1/2">
+                                <label class="block text-[10px] font-bold text-gray-500 uppercase mb-1">Pace (MM:SS)</label>
+                                <input type="text" id="pace" pattern="[0-9]{2}:[0-9]{2}" class="w-full p-2.5 text-sm bg-gray-900 border border-gray-700 rounded-lg text-white focus:border-orange-500 focus:outline-none" placeholder="07:38">
+                            </div>
+                        </div>
+                        <div id="liftFields" class="hidden flex space-x-3">
+                            <div class="w-1/2">
+                                <label class="block text-[10px] font-bold text-gray-500 uppercase mb-1">Latihan</label>
+                                <input type="text" id="liftName" class="w-full p-2.5 text-sm bg-gray-900 border border-gray-700 rounded-lg text-white focus:border-orange-500 focus:outline-none" placeholder="Lower Body">
+                            </div>
+                            <div class="w-1/2">
+                                <label class="block text-[10px] font-bold text-gray-500 uppercase mb-1">Beban/Set</label>
+                                <input type="text" id="liftDetail" class="w-full p-2.5 text-sm bg-gray-900 border border-gray-700 rounded-lg text-white focus:border-orange-500 focus:outline-none" placeholder="5kg, 3x10">
+                            </div>
+                        </div>
+                        <div>
+                            <label class="block text-[10px] font-bold text-gray-500 uppercase mb-1">Catatan Opsional</label>
+                            <input type="text" id="notes" class="w-full p-2.5 text-sm bg-gray-900 border border-gray-700 rounded-lg text-white focus:border-orange-500 focus:outline-none" placeholder="Kondisi HR / Kaki">
+                        </div>
+                        <button type="submit" class="w-full bg-gray-700 hover:bg-gray-600 text-white font-bold py-3 px-4 rounded-lg shadow-md mt-2 transition-all">
+                            Simpan ke Memori
+                        </button>
+                    </form>
+                </div>
+
+                <!-- History -->
+                <div>
+                    <h2 class="text-sm font-bold text-gray-300 mb-3 ml-1">Rekam Jejak Logistik</h2>
+                    <div id="workoutList" class="space-y-2"></div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <script>
+        // Init state
+        if(localStorage.getItem('strava_client_id')) {
+            document.getElementById('clientId').value = localStorage.getItem('strava_client_id');
+            document.getElementById('clientSecret').value = localStorage.getItem('strava_client_secret');
+        }
+        document.getElementById('date').valueAsDate = new Date();
+
+        function switchTab(tabName) {
+            document.getElementById('view-dashboard').classList.add('hidden');
+            document.getElementById('view-input').classList.add('hidden');
+            document.getElementById('tab-dashboard').classList.remove('tab-active');
+            document.getElementById('tab-input').classList.remove('tab-active');
+            document.getElementById(`view-${tabName}`).classList.remove('hidden');
+            document.getElementById(`tab-${tabName}`).classList.add('tab-active');
+            if(tabName === 'dashboard') updateDashboard();
+        }
+
+        function toggleFields() {
+            const type = document.getElementById('type').value;
+            if (type === 'lari') {
+                document.getElementById('runFields').classList.remove('hidden');
+                document.getElementById('liftFields').classList.add('hidden');
+            } else {
+                document.getElementById('runFields').classList.add('hidden');
+                document.getElementById('liftFields').classList.remove('hidden');
+            }
+        }
+        toggleFields();
+
+        document.getElementById('workoutForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            const type = document.getElementById('type').value;
+            let workout = {
+                id: Date.now(),
+                date: document.getElementById('date').value,
+                type: type,
+                notes: document.getElementById('notes').value
+            };
+
+            if (type === 'lari') {
+                workout.distance = parseFloat(document.getElementById('distance').value);
+                workout.pace = document.getElementById('pace').value;
+            } else {
+                workout.liftName = document.getElementById('liftName').value;
+                workout.liftDetail = document.getElementById('liftDetail').value;
+            }
+            saveWorkout(workout);
+            document.getElementById('workoutForm').reset();
+            document.getElementById('date').valueAsDate = new Date();
+        });
+
+        function saveWorkout(workout) {
+            let workouts = JSON.parse(localStorage.getItem('hybrid_workouts')) || [];
+            if(workout.strava_id) {
+                const exists = workouts.find(w => w.strava_id === workout.strava_id);
+                if(exists) return false;
+            }
+            workouts.unshift(workout);
+            workouts.sort((a, b) => new Date(b.date) - new Date(a.date));
+            localStorage.setItem('hybrid_workouts', JSON.stringify(workouts));
+            renderWorkouts();
+            return true;
+        }
+
+        // ================= STRAVA LOGIC =================
+        function connectStrava() {
+            const clientId = document.getElementById('clientId').value.trim();
+            const clientSecret = document.getElementById('clientSecret').value.trim();
+            if(!clientId || !clientSecret) { alert('Harap isi Client ID dan Client Secret!'); return; }
+            localStorage.setItem('strava_client_id', clientId);
+            localStorage.setItem('strava_client_secret', clientSecret);
+            const authUrl = `https://www.strava.com/oauth/authorize?client_id=${clientId}&response_type=code&redirect_uri=http://localhost&approval_prompt=force&scope=activity:read_all`;
+            window.open(authUrl, '_blank');
+            document.getElementById('step2').classList.remove('hidden');
+        }
+
+        async function processStravaUrl() {
+            const urlString = document.getElementById('redirectUrl').value.trim();
+            const statusText = document.getElementById('stravaStatus');
+            statusText.classList.remove('hidden');
+            statusText.className = 'text-xs text-orange-400 mt-2 font-bold';
+
+            if(!urlString.includes('code=')) {
+                statusText.innerText = "Gagal: URL tidak mengandung kode (code=).";
+                return;
+            }
+
+            try {
+                const url = new URL(urlString);
+                const code = url.searchParams.get('code');
+                const clientId = localStorage.getItem('strava_client_id');
+                const clientSecret = localStorage.getItem('strava_client_secret');
+                statusText.innerText = "Membuka gembok data Strava...";
+
+                const response = await fetch('https://www.strava.com/oauth/token', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ client_id: clientId, client_secret: clientSecret, code: code, grant_type: 'authorization_code' })
+                });
+
+                if(!response.ok) throw new Error("Gagal verifikasi Client Secret.");
+                const data = await response.json();
+                pullActivities(data.access_token);
+            } catch(e) {
+                statusText.innerText = "Error: " + e.message;
+            }
+        }
+
+        async function pullActivities(token) {
+            const statusText = document.getElementById('stravaStatus');
+            statusText.innerText = "Menyalin data dari server...";
+            
+            try {
+                const response = await fetch('https://www.strava.com/api/v3/athlete/activities?per_page=30', {
+                    headers: { 'Authorization': 'Bearer ' + token }
+                });
+                if(!response.ok) throw new Error("API menolak akses.");
+                const activities = await response.json();
+                let addedCount = 0;
+
+                activities.forEach(activity => {
+                    if(activity.type === 'Run' || activity.type === 'VirtualRun') {
+                        let speedMS = activity.average_speed;
+                        let paceSecs = speedMS > 0 ? 1000 / speedMS : 0;
+                        let mins = Math.floor(paceSecs / 60);
+                        let secs = Math.floor(paceSecs % 60);
+                        let formatPace = `${mins.toString().padStart(2, '0')}:${secs.toString().padStart(2, '0')}`;
+                        let workout = {
+                            id: Date.now() + Math.random(),
+                            strava_id: activity.id,
+                            date: activity.start_date_local.split('T')[0],
+                            type: 'lari',
+                            distance: parseFloat((activity.distance / 1000).toFixed(2)),
+                            pace: formatPace,
+                            notes: activity.name
+                        };
+                        if(saveWorkout(workout)) addedCount++;
+                    }
+                });
+
+                statusText.innerText = `Berhasil! ${addedCount} data lari baru disinkronisasi.`;
+                statusText.classList.replace('text-orange-400', 'text-green-400');
+                updateDashboard();
+                document.getElementById('redirectUrl').value = '';
+            } catch(e) {
+                statusText.innerText = "Error Tarik Data: " + e.message;
+            }
+        }
+
+        // ================= DASHBOARD LOGIC =================
+        function updateDashboard() {
+            // 1. Jadwal Harian
+            const today = new Date().getDay();
+            const schedules = [
+                { title: "Long Run / Endurance", detail: "Fokus daya tahan. Jaga HR di Zona 2. Siapkan hidrasi." },
+                { title: "Istirahat Total", detail: "Fokus Intermittent Fasting & nutrisi. Biarkan otot pulih 100%." },
+                { title: "Fartlek / Speed", detail: "Bermain ambang laktat. Kalibrasi metronom jantung Anda." },
+                { title: "Bengkel Mekanis", detail: "Dumbbell RDL & Goblet Squat. Penebalan bantalan lutut & paha." },
+                { title: "Easy Run", detail: "Pijatan aspal. Bilas asam laktat dari sesi beban kemarin." },
+                { title: "Mobilitas Aktif", detail: "Peregangan statis, jalan ringan. Persiapan sirkulasi." },
+                { title: "Cross Training", detail: "Fokus otot bahu, punggung atas, dan ketahanan core." }
+            ];
+            document.getElementById('todayAgenda').innerText = schedules[today].title;
+            document.getElementById('todayDetail').innerText = schedules[today].detail;
+
+            let workouts = JSON.parse(localStorage.getItem('hybrid_workouts')) || [];
+            
+            // 2. Kalkulasi Jarak Mingguan
+            let now = new Date();
+            let currentDay = now.getDay() || 7; // Convert Sun(0) to 7
+            let startOfWeek = new Date(now.getFullYear(), now.getMonth(), now.getDate() - currentDay + 1);
+            
+            let weeklyDist = 0;
+            workouts.forEach(w => {
+                if(w.type === 'lari' && w.distance) {
+                    let wDate = new Date(w.date);
+                    if(wDate >= startOfWeek) weeklyDist += w.distance;
+                }
+            });
+
+            const TARGET_WEEKLY = 15;
+            document.getElementById('weeklyDistance').innerText = weeklyDist.toFixed(2) + ' Km';
+            let percent = Math.min(Math.round((weeklyDist / TARGET_WEEKLY) * 100), 100);
+            document.getElementById('weeklyPercent').innerText = percent + '%';
+            document.getElementById('weeklyProgress').style.width = percent + '%';
+
+            // 3. Proyeksi Riegel
+            let validRuns = workouts.filter(w => w.type === 'lari' && w.pace && w.distance >= 2.5);
+            if(validRuns.length > 0) {
+                let bestRun = validRuns.reduce((prev, current) => {
+                    return (paceToSeconds(prev.pace) < paceToSeconds(current.pace)) ? prev : current;
+                });
+                let d1 = bestRun.distance;
+                let t1 = d1 * paceToSeconds(bestRun.pace); 
+                
+                document.getElementById('pred5k').innerText = formatTime(t1 * Math.pow(5/d1, 1.06));
+                document.getElementById('pred10k').innerText = formatTime(t1 * Math.pow(10/d1, 1.06));
+                document.getElementById('predHM').innerText = formatTime(t1 * Math.pow(21.1/d1, 1.06));
+                document.getElementById('predFM').innerText = formatTime(t1 * Math.pow(42.195/d1, 1.06));
+            }
+        }
+
+        function paceToSeconds(paceStr) {
+            let parts = paceStr.split(':');
+            return parseInt(parts[0])*60 + parseInt(parts[1]);
+        }
+
+        function formatTime(totalSecs) {
+            let h = Math.floor(totalSecs / 3600);
+            let m = Math.floor((totalSecs % 3600) / 60);
+            let s = Math.floor(totalSecs % 60);
+            if (h > 0) return `${h}j ${m}m`;
+            return `${m}m ${s}s`;
+        }
+
+        function renderWorkouts() {
+            const list = document.getElementById('workoutList');
+            list.innerHTML = '';
+            let workouts = JSON.parse(localStorage.getItem('hybrid_workouts')) || [];
+            if(workouts.length === 0) return;
+
+            workouts.forEach(w => {
+                const dateObj = new Date(w.date);
+                const formattedDate = dateObj.toLocaleDateString('id-ID', { day: 'numeric', month: 'short', year: 'numeric' });
+                let detailHTML = '';
+                let icon = '';
+
+                if (w.type === 'lari') {
+                    icon = w.strava_id ? '<span class="w-6 h-6 bg-orange-600 rounded flex items-center justify-center text-xs shadow">S</span>' : '<span class="text-xl">🏃‍♂️</span>';
+                    detailHTML = `<p class="text-sm text-gray-200 font-bold">${w.distance} Km <span class="text-gray-600 mx-1">|</span> Pace ${w.pace}</p>`;
+                } else {
+                    icon = '<span class="text-xl">🏋️‍♂️</span>';
+                    detailHTML = `<p class="text-sm text-gray-200 font-bold">${w.liftName} <span class="text-gray-600 mx-1">|</span> <span class="text-gray-400">${w.liftDetail}</span></p>`;
+                }
+
+                const card = `
+                    <div class="bg-gray-800/80 p-3 rounded-xl border border-gray-700/50 flex items-start justify-between shadow-sm">
+                        <div class="flex-grow flex items-center space-x-3">
+                            ${icon}
+                            <div>
+                                <p class="text-[10px] text-gray-500 font-bold uppercase tracking-wider">${formattedDate}</p>
+                                ${detailHTML}
+                                ${w.notes ? `<p class="text-[11px] text-gray-400 mt-0.5 truncate max-w-[220px]">${w.notes}</p>` : ''}
+                            </div>
+                        </div>
+                        <button onclick="deleteWorkout(${w.id})" class="text-gray-600 hover:text-red-500 p-1">
+                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path></svg>
+                        </button>
+                    </div>
+                `;
+                list.insertAdjacentHTML('beforeend', card);
+            });
+        }
+
+        function deleteWorkout(id) {
+            if(confirm('Hapus manuver latihan ini?')) {
+                let workouts = JSON.parse(localStorage.getItem('hybrid_workouts')) || [];
+                workouts = workouts.filter(w => w.id !== id);
+                localStorage.setItem('hybrid_workouts', JSON.stringify(workouts));
+                renderWorkouts();
+                updateDashboard();
+            }
+        }
+
+        renderWorkouts();
+        updateDashboard();
+    </script>
+</body>
+</html>
