@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Hybrid Athlete Tracker v5.0</title>
+    <title>Hybrid Athlete Tracker v5.1</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <style>
         input, select, textarea { font-size: 16px; }
@@ -15,8 +15,6 @@
         ::-webkit-scrollbar { width: 6px; }
         ::-webkit-scrollbar-track { background: #1f2937; }
         ::-webkit-scrollbar-thumb { background: #4b5563; border-radius: 10px; }
-        
-        /* Modal Animation */
         .modal-enter { opacity: 0; transform: scale(0.95); }
         .modal-enter-active { opacity: 1; transform: scale(1); transition: all 0.2s ease-out; }
     </style>
@@ -24,7 +22,6 @@
 <body class="bg-gray-900 text-gray-100 min-h-screen pb-10 font-sans antialiased selection:bg-orange-500 selection:text-white">
 
     <div class="max-w-md mx-auto bg-[#111827] min-h-screen shadow-2xl flex flex-col relative overflow-hidden">
-        <!-- Glow effect -->
         <div class="absolute top-0 left-1/2 -translate-x-1/2 w-[300px] h-[150px] bg-orange-600/20 blur-[80px] rounded-full pointer-events-none"></div>
 
         <header class="bg-gradient-to-r from-gray-900 to-gray-800 border-b border-gray-800 text-white p-5 sticky top-0 z-20 backdrop-blur-md bg-opacity-90 flex justify-between items-center">
@@ -32,7 +29,7 @@
                 <h1 class="text-2xl font-black tracking-widest bg-clip-text text-transparent bg-gradient-to-r from-orange-500 to-red-500">
                     HYBRID ATHLETE
                 </h1>
-                <p class="text-[10px] text-gray-400 mt-1 uppercase tracking-widest">AI Coach Integrated v5.0</p>
+                <p class="text-[10px] text-gray-400 mt-1 uppercase tracking-widest">AI Coach Integrated v5.1</p>
             </div>
             <div class="text-right">
                 <span id="currentDayLabel" class="text-[10px] font-bold bg-orange-500/20 text-orange-400 px-2 py-1 rounded border border-orange-500/30">HARI INI</span>
@@ -116,11 +113,50 @@
                         </div>
                     </div>
                 </div>
+
+                <!-- Ultimate Goals (RESTORED) -->
+                <div class="bg-gray-800/60 backdrop-blur-sm rounded-xl p-4 border border-gray-700/50 shadow-lg">
+                    <div class="flex items-center space-x-2 mb-3">
+                        <span class="text-orange-500 text-lg">🎯</span>
+                        <h2 class="text-xs font-bold text-orange-500 uppercase tracking-wider">Ultimate Goals</h2>
+                    </div>
+                    <div class="space-y-3">
+                        <div class="flex items-center justify-between p-3 bg-gray-900/50 rounded-lg border border-gray-700/50">
+                            <div class="flex items-center space-x-3">
+                                <div class="w-8 h-8 rounded-full bg-orange-500/20 flex items-center justify-center border border-orange-500/50">
+                                    <span class="text-sm">🔥</span>
+                                </div>
+                                <div>
+                                    <p class="text-sm font-bold text-white">Sub-2 HM</p>
+                                    <p class="text-[10px] text-gray-400">Juni 2027</p>
+                                </div>
+                            </div>
+                            <div class="text-right">
+                                <p class="text-[10px] font-bold text-gray-400 uppercase">Target Pace</p>
+                                <p class="text-sm font-black text-orange-400">05:41 /km</p>
+                            </div>
+                        </div>
+                        <div class="flex items-center justify-between p-3 bg-gray-900/50 rounded-lg border border-gray-700/50">
+                            <div class="flex items-center space-x-3">
+                                <div class="w-8 h-8 rounded-full bg-red-500/20 flex items-center justify-center border border-red-500/50">
+                                    <span class="text-sm">☠️</span>
+                                </div>
+                                <div>
+                                    <p class="text-sm font-bold text-white">Full Marathon</p>
+                                    <p class="text-[10px] text-gray-400">Oktober 2027</p>
+                                </div>
+                            </div>
+                            <div class="text-right">
+                                <p class="text-[10px] font-bold text-gray-400 uppercase">Target Time</p>
+                                <p class="text-sm font-black text-red-400">04:30:00</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
             </div>
 
             <!-- INPUT & SYNC TAB -->
             <div id="view-input" class="hidden space-y-4">
-                
                 <div class="bg-gray-800/60 backdrop-blur-sm rounded-xl p-4 border border-gray-700/50 shadow-lg relative overflow-hidden">
                     <div class="absolute left-0 top-0 w-1 h-full bg-orange-500"></div>
                     <h2 class="text-sm font-bold text-white mb-3 flex items-center">
@@ -182,8 +218,8 @@
                             </div>
                         </div>
                         <div>
-                            <label class="block text-[10px] font-bold text-gray-500 uppercase mb-1">Catatan Opsional</label>
-                            <input type="text" id="notes" class="w-full p-2 text-sm bg-gray-900 border border-gray-700 rounded-lg text-white" placeholder="Kondisi HR / Kaki">
+                            <label class="block text-[10px] font-bold text-gray-500 uppercase mb-1">Catatan & Avg HR</label>
+                            <input type="text" id="notes" class="w-full p-2 text-sm bg-gray-900 border border-gray-700 rounded-lg text-white" placeholder="Contoh: Avg HR 135 bpm, segar">
                         </div>
                         <button type="submit" class="w-full bg-gray-700 hover:bg-gray-600 text-white font-bold py-2.5 px-4 rounded-lg shadow-md mt-2 transition-all">
                             Simpan ke Memori
@@ -193,7 +229,6 @@
 
                 <div>
                     <h2 class="text-sm font-bold text-gray-300 mb-3 ml-1">Rekam Jejak Logistik & Analisis</h2>
-                    <!-- Placeholder untuk notifikasi copy -->
                     <div id="copyToast" class="fixed top-10 left-1/2 -translate-x-1/2 bg-green-500 text-white px-4 py-2 rounded-full shadow-xl text-xs font-bold transition-opacity opacity-0 pointer-events-none z-50">Prompt Disalin! Paste ke Coach.</div>
                     <div id="workoutList" class="space-y-3 pb-20"></div>
                 </div>
@@ -252,7 +287,7 @@
                 date: document.getElementById('date').value,
                 type: type,
                 notes: document.getElementById('notes').value,
-                coach_feedback: '' // Field baru untuk analisis Coach
+                coach_feedback: ''
             };
 
             if (type === 'lari') {
@@ -280,7 +315,6 @@
             return true;
         }
 
-        // ================= STRAVA LOGIC =================
         function connectStrava() {
             const clientId = document.getElementById('clientId').value.trim();
             const clientSecret = document.getElementById('clientSecret').value.trim();
@@ -350,23 +384,20 @@
             } catch(e) { statusText.innerText = "Error Tarik Data: " + e.message; }
         }
 
-        // ================= AI COACH LOOP LOGIC =================
         function generateCoachPrompt(id) {
             let workouts = JSON.parse(localStorage.getItem('hybrid_workouts')) || [];
             let w = workouts.find(work => work.id === id);
             if(!w) return;
 
-            // Membangun Prompt untuk AI
             let promptText = `Halo Coach, saya baru saja menyelesaikan sesi eksekusi pada ${w.date}.\n`;
             if(w.type === 'lari') {
                 promptText += `Tipe Latihan: Lari Aspal/Treadmill\nJarak: ${w.distance} Km\nPace Rata-rata: ${w.pace} /km\n`;
             } else {
                 promptText += `Tipe Latihan: Bengkel Mekanis (Beban)\nFokus Latihan: ${w.liftName}\nBeban/Set: ${w.liftDetail}\n`;
             }
-            if(w.notes) promptText += `Catatan Kondisi Lapangan: ${w.notes}\n`;
+            if(w.notes) promptText += `Catatan Kondisi Lapangan & Heart Rate: ${w.notes}\n`;
             promptText += `\nTolong berikan summary dan analisis Anda secara klinis sebagai pelatih saya terhadap sesi ini.`;
 
-            // Copy to clipboard
             navigator.clipboard.writeText(promptText).then(() => {
                 const toast = document.getElementById('copyToast');
                 toast.classList.remove('opacity-0');
@@ -379,7 +410,6 @@
             let w = workouts.find(work => work.id === id);
             document.getElementById('coachWorkoutId').value = id;
             document.getElementById('coachInputText').value = w.coach_feedback || '';
-            
             const modal = document.getElementById('coachModal');
             const content = document.getElementById('coachModalContent');
             modal.classList.remove('hidden');
@@ -406,7 +436,6 @@
             }
         }
 
-        // ================= DASHBOARD LOGIC =================
         function updateDashboard() {
             const now = new Date();
             const days = ['Minggu', 'Senin', 'Selasa', 'Rabu', 'Kamis', 'Jumat', 'Sabtu'];
@@ -492,7 +521,6 @@
 
                 const card = `
                     <div class="bg-gray-800/80 p-3 rounded-xl border border-gray-700/50 shadow-sm overflow-hidden relative">
-                        <!-- Header & Data -->
                         <div class="flex items-start justify-between mb-2">
                             <div class="flex items-center space-x-3">
                                 ${icon}
@@ -505,7 +533,6 @@
                             <button onclick="deleteWorkout(${w.id})" class="text-gray-600 hover:text-red-500 p-1 bg-gray-900 rounded"><svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path></svg></button>
                         </div>
                         
-                        <!-- AI Coach Feedback Section -->
                         ${w.coach_feedback ? `
                             <div class="mt-2 p-2.5 bg-blue-900/20 border border-blue-500/20 rounded-lg">
                                 <p class="text-[10px] font-bold text-blue-400 mb-1 flex items-center"><span>🤖 Analisis Pelatih</span></p>
@@ -513,7 +540,6 @@
                             </div>
                         ` : ''}
 
-                        <!-- Action Buttons -->
                         <div class="flex space-x-2 mt-3 pt-2 border-t border-gray-700/50">
                             <button onclick="generateCoachPrompt(${w.id})" class="flex-1 bg-gray-700 hover:bg-gray-600 text-gray-300 text-[10px] font-bold py-1.5 rounded transition-all">📋 Copy Prompt</button>
                             <button onclick="openCoachModal(${w.id})" class="flex-1 bg-orange-600/80 hover:bg-orange-600 text-white text-[10px] font-bold py-1.5 rounded transition-all">${w.coach_feedback ? '✏️ Edit Analisis' : '📝 Pasang Analisis'}</button>
