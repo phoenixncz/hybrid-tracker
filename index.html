@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Hybrid Athlete Tracker v6.0</title>
+    <title>Hybrid Athlete Tracker v6.1</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <style>
         input, select, textarea { font-size: 16px; }
@@ -15,12 +15,8 @@
         ::-webkit-scrollbar { width: 5px; }
         ::-webkit-scrollbar-track { background: transparent; }
         ::-webkit-scrollbar-thumb { background: #4b5563; border-radius: 10px; }
-        
-        /* Smooth Animations */
         .modal-enter { opacity: 0; transform: scale(0.95) translateY(10px); }
         .modal-enter-active { opacity: 1; transform: scale(1) translateY(0); transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1); }
-        
-        /* Glass Card Effect */
         .glass-card {
             background: rgba(31, 41, 55, 0.6);
             backdrop-filter: blur(12px);
@@ -37,34 +33,28 @@
         <div class="absolute top-0 left-1/2 -translate-x-1/2 w-[400px] h-[400px] bg-orange-600/10 blur-[100px] rounded-full pointer-events-none z-0"></div>
         <div class="absolute bottom-0 right-0 w-[300px] h-[300px] bg-blue-600/10 blur-[100px] rounded-full pointer-events-none z-0"></div>
 
-        <!-- Header -->
         <header class="glass-card sticky top-0 z-30 p-5 flex justify-between items-center border-b border-gray-800">
             <div>
                 <h1 class="text-2xl font-black tracking-widest bg-clip-text text-transparent bg-gradient-to-r from-orange-400 to-red-500 drop-shadow-md">
                     HYBRID ATHLETE
                 </h1>
-                <p class="text-[10px] text-gray-400 mt-0.5 uppercase tracking-widest font-semibold">Engine Tracker v6.0</p>
+                <p class="text-[10px] text-gray-400 mt-0.5 uppercase tracking-widest font-semibold">Engine Tracker v6.1</p>
             </div>
             <div class="text-right">
                 <span id="currentDayLabel" class="text-[10px] font-black bg-orange-500/20 text-orange-400 px-2.5 py-1 rounded-full border border-orange-500/30 shadow-[0_0_10px_rgba(249,115,22,0.2)]">HARI INI</span>
             </div>
         </header>
 
-        <!-- Navigation Tabs -->
         <div class="flex glass-card sticky top-[77px] z-20 border-b border-gray-800">
             <button onclick="switchTab('dashboard')" id="tab-dashboard" class="flex-1 py-3.5 text-xs font-black text-gray-500 uppercase tracking-widest tab-active transition-all hover:text-gray-300">Dashboard</button>
             <button onclick="switchTab('input')" id="tab-input" class="flex-1 py-3.5 text-xs font-black text-gray-500 uppercase tracking-widest transition-all hover:text-gray-300">Log & Sync</button>
         </div>
 
         <main class="p-4 flex-grow relative z-10 space-y-5">
-            
             <!-- ================= DASHBOARD TAB ================= -->
             <div id="view-dashboard" class="space-y-5">
-                
-                <!-- Sesi Hari Ini -->
                 <div class="glass-card rounded-2xl p-5 relative overflow-hidden group hover:border-blue-500/30 transition-all duration-300">
                     <div class="absolute left-0 top-0 w-1.5 h-full bg-gradient-to-b from-blue-400 to-blue-600"></div>
-                    
                     <div class="flex justify-between items-start mb-3">
                         <div class="flex items-center space-x-2">
                             <span class="text-blue-400 text-xl">🎯</span>
@@ -74,48 +64,43 @@
                             <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path></svg>
                         </button>
                     </div>
-                    
                     <p id="todayAgenda" class="text-2xl font-black text-white tracking-wide"></p>
                     <p id="todayDetail" class="text-xs text-gray-400 mt-2 leading-relaxed pb-4 border-b border-gray-700/50"></p>
-                    
                     <div class="grid grid-cols-2 gap-3 mt-4">
-                        <div class="bg-gray-900/50 p-3 rounded-xl border border-gray-700/30 hover:bg-gray-800/50 transition-colors">
+                        <div class="bg-gray-900/50 p-3 rounded-xl border border-gray-700/30">
                             <p class="text-[9px] text-gray-500 font-bold uppercase tracking-widest mb-1">Jarak / Waktu</p>
                             <p id="todayTarget" class="text-sm font-black text-blue-100">-</p>
                         </div>
-                        <div class="bg-gray-900/50 p-3 rounded-xl border border-gray-700/30 hover:bg-gray-800/50 transition-colors">
+                        <div class="bg-gray-900/50 p-3 rounded-xl border border-gray-700/30">
                             <p class="text-[9px] text-gray-500 font-bold uppercase tracking-widest mb-1">Pace / Beban</p>
                             <p id="todayPace" class="text-sm font-black text-orange-400">-</p>
                         </div>
                     </div>
                 </div>
 
-                <!-- Keausan Sepatu & Milase Mingguan -->
                 <div class="grid grid-cols-2 gap-4">
-                    <div class="glass-card rounded-2xl p-4 hover:border-green-500/30 transition-all duration-300">
+                    <div class="glass-card rounded-2xl p-4 hover:border-green-500/30 transition-all">
                         <div class="flex items-center space-x-2 mb-3">
                             <span class="text-green-400">📊</span>
                             <h2 class="text-[10px] font-black text-green-400 uppercase tracking-widest">Minggu Ini</h2>
                         </div>
                         <p class="text-base font-black text-white mb-2"><span id="weeklyDistance">0.00</span> <span class="text-[10px] text-gray-500 font-bold">/ 15 Km</span></p>
                         <div class="w-full bg-gray-900/80 rounded-full h-2 overflow-hidden border border-gray-700/50">
-                            <div id="weeklyProgress" class="bg-gradient-to-r from-green-500 to-emerald-400 h-full rounded-full transition-all duration-1000 ease-out" style="width: 0%"></div>
+                            <div id="weeklyProgress" class="bg-gradient-to-r from-green-500 to-emerald-400 h-full rounded-full transition-all duration-1000" style="width: 0%"></div>
                         </div>
                     </div>
-                    
-                    <div class="glass-card rounded-2xl p-4 hover:border-orange-500/30 transition-all duration-300">
+                    <div class="glass-card rounded-2xl p-4 hover:border-orange-500/30 transition-all">
                         <div class="flex items-center space-x-2 mb-3">
                             <span class="text-orange-400">👟</span>
                             <h2 class="text-[10px] font-black text-orange-400 uppercase tracking-widest">Novablast 5</h2>
                         </div>
                         <p class="text-base font-black text-white mb-2"><span id="shoeMileage">0.0</span> <span class="text-[10px] text-gray-500 font-bold">/ 600 Km</span></p>
                         <div class="w-full bg-gray-900/80 rounded-full h-2 overflow-hidden border border-gray-700/50">
-                            <div id="shoeProgress" class="bg-gradient-to-r from-orange-500 to-red-500 h-full rounded-full transition-all duration-1000 ease-out" style="width: 0%"></div>
+                            <div id="shoeProgress" class="bg-gradient-to-r from-orange-500 to-red-500 h-full rounded-full transition-all duration-1000" style="width: 0%"></div>
                         </div>
                     </div>
                 </div>
 
-                <!-- Proyeksi Performa Riegel -->
                 <div class="glass-card rounded-2xl p-5">
                     <div class="flex items-center space-x-2 mb-4">
                         <span class="text-yellow-400 text-xl">⚡</span>
@@ -130,53 +115,13 @@
                             <p class="text-[10px] text-gray-500 font-black mb-1">10K</p>
                             <p id="pred10k" class="text-xs font-bold text-white">-</p>
                         </div>
-                        <div class="bg-orange-900/10 py-3 rounded-xl border border-orange-500/20 shadow-[0_0_10px_rgba(249,115,22,0.05)] text-center">
+                        <div class="bg-orange-900/10 py-3 rounded-xl border border-orange-500/20 text-center">
                             <p class="text-[10px] text-orange-500 font-black mb-1">HM</p>
                             <p id="predHM" class="text-xs font-bold text-orange-400">-</p>
                         </div>
-                        <div class="bg-red-900/10 py-3 rounded-xl border border-red-500/20 shadow-[0_0_10px_rgba(239,68,68,0.05)] text-center">
+                        <div class="bg-red-900/10 py-3 rounded-xl border border-red-500/20 text-center">
                             <p class="text-[10px] text-red-500 font-black mb-1">FM</p>
                             <p id="predFM" class="text-xs font-bold text-red-400">-</p>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Ultimate Goals -->
-                <div class="glass-card rounded-2xl p-5">
-                    <div class="flex items-center space-x-2 mb-4">
-                        <span class="text-orange-500 text-xl">🏆</span>
-                        <h2 class="text-xs font-black text-white uppercase tracking-widest">Ultimate Goals</h2>
-                    </div>
-                    <div class="space-y-3">
-                        <div class="flex items-center justify-between p-3.5 bg-gray-900/40 rounded-xl border border-gray-700/30 hover:bg-gray-800/50 transition-colors">
-                            <div class="flex items-center space-x-3">
-                                <div class="w-10 h-10 rounded-full bg-orange-500/10 flex items-center justify-center border border-orange-500/30">
-                                    <span class="text-lg">🔥</span>
-                                </div>
-                                <div>
-                                    <p class="text-sm font-black text-white tracking-wide">Sub-2 HM</p>
-                                    <p class="text-[10px] text-gray-400 font-medium">Juni 2027</p>
-                                </div>
-                            </div>
-                            <div class="text-right">
-                                <p class="text-[9px] font-bold text-gray-500 uppercase tracking-wider mb-0.5">Target Pace</p>
-                                <p class="text-sm font-black text-orange-400">05:41 /km</p>
-                            </div>
-                        </div>
-                        <div class="flex items-center justify-between p-3.5 bg-gray-900/40 rounded-xl border border-gray-700/30 hover:bg-gray-800/50 transition-colors">
-                            <div class="flex items-center space-x-3">
-                                <div class="w-10 h-10 rounded-full bg-red-500/10 flex items-center justify-center border border-red-500/30">
-                                    <span class="text-lg">☠️</span>
-                                </div>
-                                <div>
-                                    <p class="text-sm font-black text-white tracking-wide">Full Marathon</p>
-                                    <p class="text-[10px] text-gray-400 font-medium">Oktober 2027</p>
-                                </div>
-                            </div>
-                            <div class="text-right">
-                                <p class="text-[9px] font-bold text-gray-500 uppercase tracking-wider mb-0.5">Target Time</p>
-                                <p class="text-sm font-black text-red-400">04:30:00</p>
-                            </div>
                         </div>
                     </div>
                 </div>
@@ -189,19 +134,25 @@
                     <div class="absolute left-0 top-0 w-1.5 h-full bg-orange-500"></div>
                     <h2 class="text-xs font-black text-white mb-4 flex items-center tracking-widest uppercase">
                         <svg class="w-4 h-4 text-orange-500 mr-2" fill="currentColor" viewBox="0 0 24 24"><path d="M15.387 17.944l-2.089-4.116h-3.065L15.387 24l5.15-10.172h-3.066m-7.008-5.599l2.836 5.598h4.172L10.463 0l-7 13.828h4.169"/></svg>
-                        Sinkronisasi API Strava
+                        API Strava
                     </h2>
                     <div class="space-y-4">
                         <div class="flex space-x-3">
-                            <input type="text" id="clientId" class="w-1/3 p-3 text-xs bg-gray-900/80 border border-gray-700 rounded-xl text-white focus:outline-none focus:border-orange-500 transition-colors" placeholder="Client ID">
-                            <input type="password" id="clientSecret" class="w-2/3 p-3 text-xs bg-gray-900/80 border border-gray-700 rounded-xl text-white focus:outline-none focus:border-orange-500 transition-colors" placeholder="Client Secret">
+                            <input type="text" id="clientId" class="w-1/3 p-3 text-xs bg-gray-900/80 border border-gray-700 rounded-xl text-white focus:outline-none focus:border-orange-500" placeholder="Client ID">
+                            <input type="password" id="clientSecret" class="w-2/3 p-3 text-xs bg-gray-900/80 border border-gray-700 rounded-xl text-white focus:outline-none focus:border-orange-500" placeholder="Client Secret">
                         </div>
-                        <button onclick="connectStrava()" class="w-full bg-blue-600 hover:bg-blue-500 text-white text-xs font-black py-3.5 px-4 rounded-xl shadow-lg shadow-blue-900/50 transition-all active:scale-95">
+                        <button onclick="connectStrava()" class="w-full bg-blue-600 hover:bg-blue-500 text-white text-xs font-black py-3.5 px-4 rounded-xl shadow-lg transition-all active:scale-95">
                             👉 Langkah 1: Otorisasi
                         </button>
+                        
+                        <!-- NEW: Tombol Putuskan Koneksi -->
+                        <button onclick="disconnectStrava()" class="w-full bg-red-900/30 border border-red-500/30 hover:bg-red-800/50 text-red-300 text-[10px] font-black py-2.5 px-4 rounded-xl transition-all">
+                            🗑️ Hapus Kunci Permanen
+                        </button>
+
                         <div id="step2" class="hidden pt-4 border-t border-gray-800">
-                            <input type="text" id="redirectUrl" class="w-full p-3 text-xs bg-gray-900/80 border border-gray-700 rounded-xl text-white focus:outline-none focus:border-orange-500 transition-colors mb-3" placeholder="Paste Tautan Error (http://localhost...)">
-                            <button onclick="processStravaUrl()" class="w-full bg-gradient-to-r from-orange-600 to-red-600 hover:from-orange-500 hover:to-red-500 text-white text-xs font-black py-3.5 px-4 rounded-xl shadow-lg shadow-orange-900/50 transition-all active:scale-95">
+                            <input type="text" id="redirectUrl" class="w-full p-3 text-xs bg-gray-900/80 border border-gray-700 rounded-xl text-white focus:outline-none focus:border-orange-500 mb-3" placeholder="Paste Tautan Error">
+                            <button onclick="processStravaUrl()" class="w-full bg-gradient-to-r from-orange-600 to-red-600 hover:from-orange-500 hover:to-red-500 text-white text-xs font-black py-3.5 px-4 rounded-xl shadow-lg transition-all active:scale-95">
                                 Langkah 2: Tarik & Ekstrak Data
                             </button>
                         </div>
@@ -215,11 +166,11 @@
                         <div class="grid grid-cols-2 gap-4">
                             <div>
                                 <label class="block text-[9px] font-black text-gray-500 uppercase tracking-widest mb-1.5">Tanggal Eksekusi</label>
-                                <input type="date" id="date" class="w-full p-3 text-sm bg-gray-900/80 border border-gray-700 rounded-xl text-white focus:outline-none focus:border-orange-500 transition-colors" required>
+                                <input type="date" id="date" class="w-full p-3 text-sm bg-gray-900/80 border border-gray-700 rounded-xl text-white focus:outline-none focus:border-orange-500" required>
                             </div>
                             <div>
                                 <label class="block text-[9px] font-black text-gray-500 uppercase tracking-widest mb-1.5">Jenis Mesin</label>
-                                <select id="type" class="w-full p-3 text-sm bg-gray-900/80 border border-gray-700 rounded-xl text-white focus:outline-none focus:border-orange-500 transition-colors" onchange="toggleFields()" required>
+                                <select id="type" class="w-full p-3 text-sm bg-gray-900/80 border border-gray-700 rounded-xl text-white focus:outline-none focus:border-orange-500" onchange="toggleFields()" required>
                                     <option value="lari">Lari (Aspal)</option>
                                     <option value="beban">Beban (Besi)</option>
                                 </select>
@@ -266,7 +217,7 @@
 
                         <div>
                             <label class="block text-[9px] font-black text-gray-500 uppercase tracking-widest mb-1.5">Catatan Lapangan</label>
-                            <input type="text" id="notes" class="w-full p-3 text-sm bg-gray-900/80 border border-gray-700 rounded-xl text-white focus:outline-none focus:border-orange-500" placeholder="Cuaca, energi, keluhan kaki...">
+                            <input type="text" id="notes" class="w-full p-3 text-sm bg-gray-900/80 border border-gray-700 rounded-xl text-white focus:outline-none focus:border-orange-500">
                         </div>
                         <button type="submit" class="w-full bg-gray-700 hover:bg-gray-600 text-white font-black tracking-wider py-3.5 px-4 rounded-xl shadow-md mt-2 transition-all active:scale-95">
                             Simpan ke Memori Lokal
@@ -286,22 +237,19 @@
         <div id="coachModal" class="fixed inset-0 bg-black/80 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4">
             <div class="glass-card w-full max-w-sm rounded-2xl p-6 shadow-2xl modal-enter border border-gray-700" id="coachModalContent">
                 <h3 class="text-orange-500 font-black mb-1 flex items-center text-sm tracking-wide"><span class="mr-2 text-xl">🤖</span> Input AI Coach</h3>
-                <p class="text-[10px] text-gray-400 mb-4 font-medium">Paste jawaban analisis klinis Coach AI di sini.</p>
-                <textarea id="coachInputText" class="w-full h-48 bg-gray-900/80 border border-gray-700 text-white text-[11px] p-4 rounded-xl focus:outline-none focus:border-orange-500 mb-5 leading-relaxed" placeholder="Paste markdown di sini..."></textarea>
+                <textarea id="coachInputText" class="w-full h-48 bg-gray-900/80 border border-gray-700 text-white text-[11px] p-4 rounded-xl focus:outline-none focus:border-orange-500 mb-5 leading-relaxed" placeholder="Paste teks di sini..."></textarea>
                 <input type="hidden" id="coachWorkoutId">
                 <div class="flex space-x-3">
-                    <button onclick="closeCoachModal()" class="flex-1 bg-gray-800 hover:bg-gray-700 text-white text-xs font-black py-3 rounded-xl transition-colors">Batal</button>
-                    <button onclick="saveCoachAnalysis()" class="flex-1 bg-gradient-to-r from-orange-600 to-red-600 hover:from-orange-500 hover:to-red-500 text-white text-xs font-black py-3 rounded-xl shadow-lg transition-all active:scale-95">Simpan Permanen</button>
+                    <button onclick="closeCoachModal()" class="flex-1 bg-gray-800 text-white text-xs font-black py-3 rounded-xl transition-colors">Batal</button>
+                    <button onclick="saveCoachAnalysis()" class="flex-1 bg-gradient-to-r from-orange-600 to-red-600 text-white text-xs font-black py-3 rounded-xl shadow-lg transition-all active:scale-95">Simpan Permanen</button>
                 </div>
             </div>
         </div>
 
-        <!-- NEW: Modul Pengaturan Jadwal (Schedule Override) -->
+        <!-- Modul Pengaturan Jadwal -->
         <div id="settingsModal" class="fixed inset-0 bg-black/80 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4">
             <div class="glass-card w-full max-w-sm rounded-2xl p-6 shadow-2xl modal-enter border border-gray-700" id="settingsModalContent">
                 <h3 class="text-blue-400 font-black mb-1 flex items-center text-sm tracking-wide"><span class="mr-2 text-xl">⚙️</span> Editor Jadwal Mesin</h3>
-                <p class="text-[10px] text-gray-400 mb-4 font-medium">Modifikasi cetak biru latihan harian Anda.</p>
-                
                 <div class="space-y-4">
                     <div>
                         <label class="block text-[9px] font-black text-gray-500 uppercase tracking-widest mb-1.5">Pilih Hari</label>
@@ -317,45 +265,42 @@
                     </div>
                     <div>
                         <label class="block text-[9px] font-black text-gray-500 uppercase tracking-widest mb-1.5">Judul Sesi</label>
-                        <input type="text" id="schTitle" class="w-full p-3 text-sm bg-gray-900/80 border border-gray-700 rounded-xl text-white focus:outline-none focus:border-blue-500" placeholder="Contoh: Easy Run">
+                        <input type="text" id="schTitle" class="w-full p-3 text-sm bg-gray-900/80 border border-gray-700 rounded-xl text-white focus:outline-none focus:border-blue-500">
                     </div>
                     <div>
                         <label class="block text-[9px] font-black text-gray-500 uppercase tracking-widest mb-1.5">Instruksi Detail</label>
-                        <input type="text" id="schDetail" class="w-full p-3 text-sm bg-gray-900/80 border border-gray-700 rounded-xl text-white focus:outline-none focus:border-blue-500" placeholder="Fokus pada zona 2...">
+                        <input type="text" id="schDetail" class="w-full p-3 text-sm bg-gray-900/80 border border-gray-700 rounded-xl text-white focus:outline-none focus:border-blue-500">
                     </div>
                     <div class="flex space-x-3">
                         <div class="w-1/2">
                             <label class="block text-[9px] font-black text-gray-500 uppercase tracking-widest mb-1.5">Target Jarak/Waktu</label>
-                            <input type="text" id="schTarget" class="w-full p-3 text-sm bg-gray-900/80 border border-gray-700 rounded-xl text-white focus:outline-none focus:border-blue-500" placeholder="60 Menit">
+                            <input type="text" id="schTarget" class="w-full p-3 text-sm bg-gray-900/80 border border-gray-700 rounded-xl text-white focus:outline-none focus:border-blue-500">
                         </div>
                         <div class="w-1/2">
-                            <label class="block text-[9px] font-black text-gray-500 uppercase tracking-widest mb-1.5">Target Pace/Beban</label>
-                            <input type="text" id="schPace" class="w-full p-3 text-sm bg-gray-900/80 border border-gray-700 rounded-xl text-white focus:outline-none focus:border-blue-500" placeholder="07:45 /km">
+                            <label class="block text-[9px] font-black text-gray-500 uppercase tracking-widest mb-1.5">Target Pace</label>
+                            <input type="text" id="schPace" class="w-full p-3 text-sm bg-gray-900/80 border border-gray-700 rounded-xl text-white focus:outline-none focus:border-blue-500">
                         </div>
                     </div>
                 </div>
-
                 <div class="flex space-x-3 mt-6">
-                    <button onclick="closeSettingsModal()" class="flex-1 bg-gray-800 hover:bg-gray-700 text-white text-xs font-black py-3 rounded-xl transition-colors">Batal</button>
-                    <button onclick="saveScheduleOverride()" class="flex-1 bg-blue-600 hover:bg-blue-500 text-white text-xs font-black py-3 rounded-xl shadow-lg transition-all active:scale-95">Simpan Jadwal</button>
+                    <button onclick="closeSettingsModal()" class="flex-1 bg-gray-800 text-white text-xs font-black py-3 rounded-xl transition-colors">Batal</button>
+                    <button onclick="saveScheduleOverride()" class="flex-1 bg-blue-600 text-white text-xs font-black py-3 rounded-xl shadow-lg transition-all active:scale-95">Simpan Jadwal</button>
                 </div>
             </div>
         </div>
     </div>
 
     <script>
-        // Default Master Schedule (Updated based on user preference)
         const defaultSchedules = [
-            { title: "Long Run", detail: "Fokus daya tahan kardiovaskular. Dilarang push kecepatan.", target: "90 Menit", pace: "07:45 - 08:20" }, // 0: Minggu
-            { title: "Istirahat Mutlak", detail: "Fokus Intermittent Fasting (Mulai 13:00) & hidrasi 3L.", target: "0 Km", pace: "Pemulihan" }, // 1: Senin
-            { title: "Fartlek", detail: "Bermain dengan ambang laktat. Uji respons jantung.", target: "45 Menit", pace: "Surge 06:30" }, // 2: Selasa
-            { title: "Bengkel Mekanis: Lower", detail: "Dumbbell RDL & Goblet Squat. Siapkan bantalan otot.", target: "3x10 Reps", pace: "Fokus Beban" }, // 3: Rabu
-            { title: "Easy Run", detail: "Pijatan aspal. Bilas asam laktat kaki.", target: "60 Menit", pace: "08:15 - 08:30" }, // 4: Kamis
-            { title: "Bengkel Mekanis: Upper", detail: "Strength Training Upper Body. Punggung, bahu, dada, core.", target: "Upper Body", pace: "Beban Maksimal" }, // 5: Jumat (UPDATED)
-            { title: "Mobilitas Aktif", detail: "Peregangan statis, jalan santai. Persiapan sirkulasi untuk Long Run.", target: "Fleksibilitas", pace: "N/A" } // 6: Sabtu (UPDATED)
+            { title: "Long Run", detail: "Fokus daya tahan kardiovaskular. Dilarang push kecepatan.", target: "90 Menit", pace: "07:45 - 08:20" },
+            { title: "Istirahat Mutlak", detail: "Fokus Intermittent Fasting & hidrasi 3L.", target: "0 Km", pace: "Pemulihan" },
+            { title: "Fartlek", detail: "Bermain dengan ambang laktat. Uji respons jantung.", target: "45 Menit", pace: "Surge 06:30" },
+            { title: "Bengkel Mekanis: Lower", detail: "Dumbbell RDL & Goblet Squat.", target: "3x10 Reps", pace: "Fokus Beban" },
+            { title: "Easy Run", detail: "Pijatan aspal. Bilas asam laktat kaki.", target: "60 Menit", pace: "08:15 - 08:30" },
+            { title: "Bengkel Mekanis: Upper", detail: "Strength Training Upper Body.", target: "Upper Body", pace: "Beban Maksimal" },
+            { title: "Mobilitas Aktif", detail: "Peregangan statis, jalan santai.", target: "Fleksibilitas", pace: "N/A" }
         ];
 
-        // Init Form Values
         if(localStorage.getItem('strava_client_id')) {
             document.getElementById('clientId').value = localStorage.getItem('strava_client_id');
             document.getElementById('clientSecret').value = localStorage.getItem('strava_client_secret');
@@ -432,11 +377,24 @@
             document.getElementById('step2').classList.remove('hidden');
         }
 
+        // NEW: DISCONNECT STRAVA
+        function disconnectStrava() {
+            if(confirm('Peringatan: Hapus Client ID dan Secret dari memori lokal? (Ini tidak akan menghapus data latihan Anda).')) {
+                localStorage.removeItem('strava_client_id');
+                localStorage.removeItem('strava_client_secret');
+                document.getElementById('clientId').value = '';
+                document.getElementById('clientSecret').value = '';
+                const statusText = document.getElementById('stravaStatus');
+                statusText.innerText = "Kunci Strava berhasil dihancurkan.";
+                statusText.classList.replace('text-orange-400', 'text-green-400');
+                statusText.classList.remove('hidden');
+            }
+        }
+
         async function processStravaUrl() {
             const urlString = document.getElementById('redirectUrl').value.trim();
             const statusText = document.getElementById('stravaStatus');
             statusText.classList.remove('hidden');
-            
             if(!urlString.includes('code=')) { statusText.innerText = "Error: URL tidak memiliki kode."; return; }
             try {
                 const code = new URL(urlString).searchParams.get('code');
@@ -467,7 +425,6 @@
                         let paceSecs = activity.average_speed > 0 ? 1000 / activity.average_speed : 0;
                         let mins = Math.floor(paceSecs / 60);
                         let secs = Math.floor(paceSecs % 60);
-                        
                         let workout = {
                             id: Date.now() + Math.random(),
                             strava_id: activity.id,
@@ -491,12 +448,10 @@
             } catch(e) { statusText.innerText = "Error Tarik: " + e.message; }
         }
 
-        // ================= NEW: SCHEDULE OVERRIDE LOGIC =================
         function getActiveSchedules() {
             let customSchedules = JSON.parse(localStorage.getItem('custom_schedules'));
             return customSchedules ? customSchedules : JSON.parse(JSON.stringify(defaultSchedules));
         }
-
         function openSettingsModal() {
             loadScheduleForEdit();
             const modal = document.getElementById('settingsModal');
@@ -504,14 +459,12 @@
             modal.classList.remove('hidden');
             setTimeout(() => content.classList.add('modal-enter-active'), 10);
         }
-
         function closeSettingsModal() {
             const modal = document.getElementById('settingsModal');
             const content = document.getElementById('settingsModalContent');
             content.classList.remove('modal-enter-active');
             setTimeout(() => modal.classList.add('hidden'), 200);
         }
-
         function loadScheduleForEdit() {
             const dayIndex = parseInt(document.getElementById('scheduleDayEdit').value);
             const schedules = getActiveSchedules();
@@ -520,24 +473,20 @@
             document.getElementById('schTarget').value = schedules[dayIndex].target;
             document.getElementById('schPace').value = schedules[dayIndex].pace;
         }
-
         function saveScheduleOverride() {
             const dayIndex = parseInt(document.getElementById('scheduleDayEdit').value);
             let schedules = getActiveSchedules();
-            
             schedules[dayIndex] = {
                 title: document.getElementById('schTitle').value,
                 detail: document.getElementById('schDetail').value,
                 target: document.getElementById('schTarget').value,
                 pace: document.getElementById('schPace').value
             };
-            
             localStorage.setItem('custom_schedules', JSON.stringify(schedules));
             updateDashboard();
             closeSettingsModal();
         }
 
-        // ================= AI COACH LOOP & DASHBOARD =================
         function generateCoachPrompt(id) {
             let w = (JSON.parse(localStorage.getItem('hybrid_workouts')) || []).find(work => work.id === id);
             if(!w) return;
@@ -570,14 +519,12 @@
             modal.classList.remove('hidden');
             setTimeout(() => content.classList.add('modal-enter-active'), 10);
         }
-
         function closeCoachModal() {
             const modal = document.getElementById('coachModal');
             const content = document.getElementById('coachModalContent');
             content.classList.remove('modal-enter-active');
             setTimeout(() => modal.classList.add('hidden'), 200);
         }
-
         function saveCoachAnalysis() {
             let id = parseFloat(document.getElementById('coachWorkoutId').value);
             let text = document.getElementById('coachInputText').value.trim();
@@ -595,10 +542,7 @@
             const todayIndex = new Date().getDay();
             const days = ['Minggu', 'Senin', 'Selasa', 'Rabu', 'Kamis', 'Jumat', 'Sabtu'];
             document.getElementById('currentDayLabel').innerText = days[todayIndex].toUpperCase();
-
-            // Load Custom or Default Schedule
             const schedules = getActiveSchedules();
-            
             document.getElementById('todayAgenda').innerText = schedules[todayIndex].title;
             document.getElementById('todayDetail').innerText = schedules[todayIndex].detail;
             document.getElementById('todayTarget').innerText = schedules[todayIndex].target;
@@ -608,7 +552,6 @@
             let startOfWeek = new Date(); 
             startOfWeek.setDate(startOfWeek.getDate() - (todayIndex || 7) + 1);
             startOfWeek.setHours(0,0,0,0);
-            
             let weeklyDist = 0; let totalShoeDist = 0;
             workouts.forEach(w => {
                 if(w.type === 'lari' && w.distance) {
@@ -616,7 +559,6 @@
                     if(new Date(w.date) >= startOfWeek) weeklyDist += w.distance;
                 }
             });
-
             document.getElementById('weeklyDistance').innerText = weeklyDist.toFixed(2);
             document.getElementById('weeklyProgress').style.width = Math.min(Math.round((weeklyDist / 15) * 100), 100) + '%';
             document.getElementById('shoeMileage').innerText = totalShoeDist.toFixed(1);
@@ -632,22 +574,18 @@
                 document.getElementById('predFM').innerText = formatTime(t1 * Math.pow(42.195/best.distance, 1.06));
             }
         }
-
         function paceToSeconds(p) { let pt = p.split(':'); return parseInt(pt[0])*60 + parseInt(pt[1]); }
         function formatTime(s) {
             let h = Math.floor(s / 3600); let m = Math.floor((s % 3600) / 60); let sc = Math.floor(s % 60);
             return h > 0 ? `${h}j ${m}m` : `${m}m ${sc}s`;
         }
-
         function renderWorkouts() {
             const list = document.getElementById('workoutList');
             list.innerHTML = '';
             let workouts = JSON.parse(localStorage.getItem('hybrid_workouts')) || [];
-            
             workouts.forEach(w => {
                 const fDate = new Date(w.date).toLocaleDateString('id-ID', { day: 'numeric', month: 'short', year: 'numeric' });
                 let detail = ''; let icon = '';
-
                 if (w.type === 'lari') {
                     icon = w.strava_id ? '<span class="w-7 h-7 bg-gradient-to-br from-orange-500 to-red-600 rounded-full flex items-center justify-center text-[10px] font-black shadow-lg text-white">S</span>' : '<span class="text-2xl">🏃‍♂️</span>';
                     detail = `
@@ -659,7 +597,6 @@
                     icon = '<span class="text-2xl drop-shadow-md">🏋️‍♂️</span>';
                     detail = `<p class="text-sm text-white font-black tracking-wide">${w.liftName} <span class="text-gray-600 font-normal mx-1.5">|</span> <span class="text-blue-400">${w.liftDetail}</span></p>`;
                 }
-
                 const card = `
                     <div class="glass-card p-4 rounded-2xl shadow-lg relative group transition-all hover:border-gray-600">
                         <div class="flex justify-between items-start mb-3">
@@ -673,14 +610,12 @@
                             </div>
                             <button onclick="deleteWorkout(${w.id})" class="text-gray-600 hover:text-red-500 p-1.5 bg-gray-900/50 rounded-lg transition-colors"><svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path></svg></button>
                         </div>
-                        
                         ${w.coach_feedback ? `
                             <div class="mt-3 p-3 bg-blue-900/10 border border-blue-500/20 rounded-xl">
                                 <p class="text-[9px] font-black text-blue-400 uppercase tracking-widest mb-1.5 flex items-center"><span>🤖 Klinis Coach</span></p>
                                 <p class="text-[10px] text-blue-100 whitespace-pre-wrap leading-relaxed opacity-90">${w.coach_feedback}</p>
                             </div>
                         ` : ''}
-
                         <div class="flex space-x-2 mt-4 pt-3 border-t border-gray-800/50">
                             <button onclick="generateCoachPrompt(${w.id})" class="flex-1 bg-gray-800/80 hover:bg-gray-700 text-gray-300 text-[9px] font-black uppercase tracking-wider py-2.5 rounded-lg transition-colors">📋 Copy Prompt</button>
                             <button onclick="openCoachModal(${w.id})" class="flex-1 bg-gradient-to-r from-orange-600/90 to-red-600/90 hover:from-orange-500 hover:to-red-500 text-white text-[9px] font-black uppercase tracking-wider py-2.5 rounded-lg transition-all">${w.coach_feedback ? '✏️ Edit Analisis' : '📝 Pasang Analisis'}</button>
@@ -690,7 +625,6 @@
                 list.insertAdjacentHTML('beforeend', card);
             });
         }
-
         function deleteWorkout(id) {
             if(confirm('Hapus log manuver ini permanen?')) {
                 let workouts = JSON.parse(localStorage.getItem('hybrid_workouts')) || [];
@@ -699,7 +633,6 @@
                 updateDashboard();
             }
         }
-
         renderWorkouts();
         updateDashboard();
     </script>
